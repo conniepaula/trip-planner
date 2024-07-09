@@ -1,14 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 import z from "zod";
 import nodemailer from "nodemailer";
 
 import { prisma } from "../lib/prisma";
 import { getMailClient } from "../lib/mail";
-
-dayjs.extend(localizedFormat);
+import { dayjs } from "../lib/dayjs";
 
 export async function createTrip(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().post(
@@ -55,7 +52,6 @@ export async function createTrip(app: FastifyInstance) {
                   name: owner_name,
                   email: owner_email,
                   is_owner: true,
-                  is_confirmed: true,
                 },
                 ...emails_to_invite.map((email) => {
                   return { email };
@@ -68,6 +64,7 @@ export async function createTrip(app: FastifyInstance) {
 
       const formattedStartDate = dayjs(starts_at).format("LL");
       const formattedEndDate = dayjs(ends_at).format("LL");
+      const confirmationLink = `https://localhost:3333/trips/${trip.id}/confirm`;
 
       const mail = await getMailClient();
 
@@ -75,7 +72,7 @@ export async function createTrip(app: FastifyInstance) {
         from: { name: "Test", address: "hi@hi.com" },
         to: { name: owner_name, address: owner_email },
         subject: `Your trip to ${destination}`,
-        html: `<p>Confirm your trip to ${destination} from <strong>${formattedStartDate}</strong> to <strong>${formattedEndDate}</strong>.</p>`.trim(),
+        html: `<p><a href="${confirmationLink}">Confirm</a> your trip to ${destination} from <strong>${formattedStartDate}</strong> to <strong>${formattedEndDate}</strong>.</p>`.trim(),
       });
 
       console.log(nodemailer.getTestMessageUrl(message));

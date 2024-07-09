@@ -1,10 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import dayjs from "dayjs";
-import localizedFormat from "dayjs/plugin/localizedFormat";
+import nodemailer from "nodemailer";
 import z from "zod";
 
-dayjs.extend(localizedFormat);
+import { prisma } from "../lib/prisma";
+import { getMailClient } from "../lib/mail";
+import { dayjs } from "../lib/dayjs";
 
 export async function confirmTrip(app: FastifyInstance) {
   app.withTypeProvider<ZodTypeProvider>().get(
@@ -14,10 +15,48 @@ export async function confirmTrip(app: FastifyInstance) {
         params: z.object({ tripId: z.string() }),
       },
     },
-    async (request) => {
+    async (request, reply) => {
       const { tripId } = request.params;
 
-      return { tripId };
+      const trip = await prisma.trip.findUnique({
+        where: { id: tripId },
+        include: { participants: { where: { is_owner: false } } },
+      });
+
+      if (!trip) {
+        throw new Error("Trip not found.");
+      }
+
+      if (trip.is_confirmed) {
+        return reply.redirect(`http://localhost:3000/trips/${tripId}`);
+      }
+
+      await prisma.trip.update({
+        where: { id: tripId },
+        data: { is_confirmed: true },
+      });
+
+      const formattedStartDate = dayjs(trip.starts_at).format("LL");
+      const formattedEndDate = dayjs(trip.ends_at).format("LL");
+
+      const mail = await getMailClient();
+
+      await Promise.all(
+        trip.participants.map(async (participant) => {
+          const confirmationLink = `https://localhost:3333/participants/${participant.id}/confirm`;
+
+          const message = await mail.sendMail({
+            from: { name: "Test", address: "hi@hi.com" },
+            to: participant.email,
+            subject: `Your trip to ${trip.destination}`,
+            html: `<p><a href="${confirmationLink}">Confirm</a> your trip to ${trip.destination} from <strong>${formattedStartDate}</strong> to <strong>${formattedEndDate}</strong>.</p>`.trim(),
+          });
+
+          console.log(nodemailer.getTestMessageUrl(message));
+        })
+      );
+
+      return reply.redirect(`http://localhost:3000/trips/${tripId}`);
     }
   );
 }

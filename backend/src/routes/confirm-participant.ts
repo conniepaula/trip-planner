@@ -9,7 +9,7 @@ export async function confirmParticipant(app: FastifyInstance) {
     "/participants/:participantId/confirm",
     {
       schema: {
-        params: z.object({ participantId: z.string() }),
+        params: z.object({ participantId: z.string().uuid() }),
       },
     },
     async (request, reply) => {

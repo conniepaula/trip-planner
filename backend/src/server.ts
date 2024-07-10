@@ -12,6 +12,8 @@ import { createActivity } from "./routes/create-activity";
 import { getActivities } from "./routes/get-activities";
 import { createLink } from "./routes/create-link";
 import { getLinks } from "./routes/get-links";
+import { getParticipants } from "./routes/get-participants";
+import { createInvite } from "./routes/create-invite";
 
 const app = fastify();
 
@@ -27,6 +29,8 @@ app.register(createActivity);
 app.register(getActivities);
 app.register(createLink);
 app.register(getLinks);
+app.register(getParticipants);
+app.register(createInvite);
 
 app.listen({ port: 3333 }).then(() => {
   console.log("Server running on PORT 3333");

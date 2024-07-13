@@ -49,7 +49,10 @@ export async function confirmTrip(app: FastifyInstance) {
 
           const message = await mail.sendMail({
             from: { name: "Test", address: "hi@hi.com" },
-            to: participant.email,
+            to: {
+              name: participant.name,
+              address: participant.email,
+            },
             subject: `Your trip to ${trip.destination}`,
             html: `<p><a href="${confirmationLink}">Confirm</a> your trip to ${trip.destination} from <strong>${formattedStartDate}</strong> to <strong>${formattedEndDate}</strong>.</p>`.trim(),
           });

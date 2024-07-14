@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import { useReducer } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import { format } from "date-fns";
 
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
@@ -36,7 +37,7 @@ import {
   setIsDatePickerOpenAction,
   setIsInviteGuestModalOpenAction,
 } from "@/reducers/trip-creation/actions";
-import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 const participantSchema = z.object({
   name: z.string().min(2, "Min 2 characters"),
@@ -192,7 +193,7 @@ export default function CreateTripForm() {
       action={createTrip}
       className="space-y-4"
     >
-      <div className="flex h-16 items-center gap-3 rounded-xl bg-zinc-900 px-4 shadow-sm">
+      <div className="flex flex-col items-start gap-3 rounded-xl bg-zinc-900 px-4 py-3 shadow-sm sm:flex-row sm:items-center">
         <TripInput
           disabled={isGuestInputOpen}
           containerClassName="flex-1"
@@ -207,18 +208,29 @@ export default function CreateTripForm() {
           className="flex items-center gap-2 text-left"
         >
           <Calendar className="size-5 text-zinc-400" />
-          <span className="text-lg text-zinc-400">{dateToDisplay}</span>
+          <span
+            className={cn(
+              "text-lg",
+              selectedDates ? "text-zinc-100" : "text-zinc-400",
+            )}
+          >
+            {dateToDisplay}
+          </span>
         </button>
 
-        <div className="h-6 w-px bg-zinc-800" />
+        <div className="hidden h-6 w-px bg-zinc-800 sm:block" />
 
         {isGuestInputOpen ? (
-          <Button onClick={onChangeDetailsClick} variant="neutral">
+          <Button
+            onClick={onChangeDetailsClick}
+            variant="neutral"
+            className="w-full sm:w-auto"
+          >
             Change details
             <Settings2 className="size-5" />
           </Button>
         ) : (
-          <Button onClick={onContinueClick}>
+          <Button onClick={onContinueClick} className="w-full sm:w-auto">
             Continue
             <ArrowRight className="size-5" />
           </Button>
@@ -226,7 +238,7 @@ export default function CreateTripForm() {
       </div>
 
       {isGuestInputOpen && (
-        <div className="flex h-16 items-center gap-3 rounded-xl bg-zinc-900 px-4 shadow-sm">
+        <div className="flex flex-col gap-3 rounded-xl bg-zinc-900 px-4 py-3 shadow-sm sm:flex-row sm:items-center">
           <button
             type="button"
             onClick={openInviteGuestModal}
@@ -244,7 +256,7 @@ export default function CreateTripForm() {
             </span>
           </button>
 
-          <div className="h-6 w-px bg-zinc-800" />
+          <div className="hidden h-6 w-px bg-zinc-800 sm:block" />
 
           <Button onClick={openConfirmModal}>
             Confirm trip
@@ -308,7 +320,7 @@ export default function CreateTripForm() {
             ))}
           </div>
           <div className="h-px w-full bg-zinc-800" />
-          <div className="flex h-16 items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-950 px-4 shadow-sm">
+          <div className="flex flex-col items-start gap-3 rounded-xl bg-zinc-950 px-4 py-3 shadow-sm sm:flex-row sm:items-center">
             <TripInput
               icon={User}
               placeholder="Guest name"
@@ -338,9 +350,13 @@ export default function CreateTripForm() {
               }
             />
 
-            <div className="h-6 w-px bg-zinc-800" />
+            <div className="hidden h-6 w-px bg-zinc-800 sm:block" />
 
-            <Button type="button" onClick={handleInvite}>
+            <Button
+              type="button"
+              onClick={handleInvite}
+              className="w-full sm:w-auto"
+            >
               Invite
               <Plus className="size-5" />
             </Button>

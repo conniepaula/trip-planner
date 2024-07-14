@@ -10,7 +10,7 @@ export default function Modal(props: ModalProps) {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/60">
-      <div className="w-[640px] space-y-5 rounded-xl bg-zinc-900 px-6 py-5 shadow-md">
+      <div className="w-[640px] space-y-5 bg-zinc-900 px-6 py-5 shadow-md sm:rounded-xl">
         {children}
       </div>
     </div>

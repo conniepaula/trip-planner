@@ -7,7 +7,8 @@ export default function Home() {
         <div className="flex flex-col items-center gap-3">
           <span className="text-4xl">plann.er</span>
           <p className="text-lg text-zinc-300">
-            Invite your friends and organise your next trip!
+            Invite your friends and organise <br className="block sm:hidden" />
+            your next trip!
           </p>
         </div>
 
@@ -15,6 +16,7 @@ export default function Home() {
 
         <p className="text-sm text-zinc-500">
           By using plann.er, you agree with our{" "}
+          <br className="block sm:hidden" />
           <a href="#" className="text-zinc-300 underline">
             terms and privacy policy
           </a>

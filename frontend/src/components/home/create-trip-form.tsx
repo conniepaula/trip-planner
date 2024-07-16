@@ -267,42 +267,42 @@ export default function CreateTripForm() {
 
       {isDatePickerOpen && (
         <Modal>
-          <div className="space-y-2">
+          <Modal.Header>
             <Modal.Title closeModal={closeDatePicker}>
               <h2 className="text-lg font-semibold">Trip dates</h2>
             </Modal.Title>
             <Modal.Description>
               Select the start and end date of your trip.
             </Modal.Description>
-            <div className="flex justify-center">
-              <Controller
-                name="date"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <DayPicker
-                    mode="range"
-                    disabled={{ before: new Date() }}
-                    onSelect={(dateRange) => field.onChange(dateRange)}
-                    selected={field.value}
-                  />
-                )}
-              />
-            </div>
+          </Modal.Header>
+          <div className="flex justify-center">
+            <Controller
+              name="date"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <DayPicker
+                  mode="range"
+                  disabled={{ before: new Date() }}
+                  onSelect={(dateRange) => field.onChange(dateRange)}
+                  selected={field.value}
+                />
+              )}
+            />
           </div>
         </Modal>
       )}
 
       {isInviteGuestModalOpen && (
         <Modal>
-          <div className="space-y-2">
+          <Modal.Header>
             <Modal.Title closeModal={closeInviteGuestModal}>
               <h2 className="text-lg font-semibold">Invite guests</h2>
             </Modal.Title>
             <Modal.Description>
               Guest will have to confirm trip through their emails.
             </Modal.Description>
-          </div>
+          </Modal.Header>
           <div className="flex flex-wrap gap-2">
             {participants?.map((participant) => (
               <div
@@ -366,7 +366,7 @@ export default function CreateTripForm() {
 
       {isConfirmModalOpen && (
         <Modal>
-          <div className="space-y-2">
+          <Modal.Header>
             <Modal.Title closeModal={closeConfirmModal}>
               <h2 className="text-lg font-semibold">Confirm trip creation</h2>
             </Modal.Title>
@@ -381,7 +381,7 @@ export default function CreateTripForm() {
               </span>
               .
             </Modal.Description>
-          </div>
+          </Modal.Header>
 
           <div className="space-y-3">
             <div className="space-y-2">

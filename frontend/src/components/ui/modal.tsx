@@ -1,5 +1,6 @@
+import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
-import { ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 
 interface ModalProps {
   children: ReactNode;
@@ -16,6 +17,15 @@ export default function Modal(props: ModalProps) {
     </div>
   );
 }
+
+const Header = (props: ComponentProps<"div">) => {
+  const { children, className, ...rest } = props;
+  return (
+    <div className={cn("space-y-2", className)} {...rest}>
+      {children}
+    </div>
+  );
+};
 
 interface TitleProps {
   closeModal: () => void;
@@ -43,5 +53,6 @@ const Description = (props: DescriptionProps) => {
   return <p className="text-left text-sm text-zinc-400">{children}</p>;
 };
 
+Modal.Header = Header;
 Modal.Title = Title;
 Modal.Description = Description;

@@ -1,4 +1,3 @@
-import { Action } from "../types";
 import { TripCreationAction, TripCreationActionTypes } from "./actions";
 
 export interface TripCreationState {

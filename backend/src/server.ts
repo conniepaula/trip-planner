@@ -20,6 +20,8 @@ import { getParticipant } from "./routes/get-participant";
 import { errorHandler } from "./error-handler";
 import { env } from "./env";
 import { deleteParticipant } from "./routes/delete-participant";
+import { deleteLink } from "./routes/delete-link";
+import { updateLink } from "./routes/update-link";
 
 const app = fastify();
 
@@ -49,7 +51,9 @@ app.register(getActivities);
 
 // Links
 app.register(createLink);
+app.register(deleteLink);
 app.register(getLinks);
+app.register(updateLink);
 
 app.listen({ port: env.PORT }).then(() => {
   console.log(`Server running on PORT ${env.PORT}`);

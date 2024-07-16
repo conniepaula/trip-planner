@@ -2,22 +2,22 @@
 
 import { z } from "zod";
 
-const linkSchema = z.object({
-  title: z.string().min(2, "Min 2 characters"),
-  url: z.string().url(),
+const participantSchema = z.object({
+  name: z.string().min(2, "Min 2 characters"),
+  email: z.string().email(),
 });
 
-export async function createLink(data: FormData, tripId: string) {
+export async function inviteParticipant(data: FormData, tripId: string) {
   let formData = Object.fromEntries(data);
 
-  const parsed = linkSchema.safeParse(formData);
+  const parsed = participantSchema.safeParse(formData);
 
   if (!parsed.success) {
-    return { message: "Invalid link form data." };
+    return { message: "Invalid form data" };
   }
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/trips/${tripId}/links`,
+    `${process.env.NEXT_PUBLIC_API_URL}/trips/${tripId}/participants`,
     {
       method: "POST",
       headers: {

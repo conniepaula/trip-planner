@@ -1,45 +1,64 @@
-import Link from "next/link";
-import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import NextLink, { LinkProps } from "next/link";
+import { ComponentProps } from "react";
 
-interface InfoCardBaseProps {
-  title: string;
-  icon?: ReactNode;
-}
-
-interface InfoCardWithDescription extends InfoCardBaseProps {
-  description: string;
-  href?: never;
-}
-
-interface InfoCardWithHref extends InfoCardBaseProps {
-  href: string;
-  description?: never;
-}
-
-type InfoCardProps = InfoCardWithDescription | InfoCardWithHref;
-
-export default function InfoCard(props: InfoCardProps) {
-  const { title, description, href, icon } = props;
-
+export default function InfoCard(props: ComponentProps<"div">) {
+  const { children } = props;
   return (
-    <div className="flex items-center justify-between gap-4">
-      <div className="flex-1 space-y-1.5">
-        <span className="block font-medium text-zinc-100">{title}</span>
-        {href && (
-          <Link
-            href={href}
-            className="block truncate text-xs text-zinc-400 hover:text-zinc-200"
-          >
-            {href}
-          </Link>
-        )}
-        {description && (
-          <span className="block truncate text-sm text-zinc-400">
-            {description}
-          </span>
-        )}
-      </div>
-      {icon}
-    </div>
+    <div className="flex items-center justify-between gap-4">{children}</div>
   );
 }
+
+const ContentContainer = (props: ComponentProps<"div">) => {
+  const { children, className, ...rest } = props;
+  return (
+    <div className={cn("flex-1 space-y-1.5", className)} {...rest}>
+      {children}
+    </div>
+  );
+};
+
+const Title = (props: ComponentProps<"span">) => {
+  const { children, className, ...rest } = props;
+  return (
+    <span className={cn("block font-medium text-zinc-100", className)}>
+      {children}
+    </span>
+  );
+};
+
+const Link = (props: LinkProps) => {
+  const { href, ...rest } = props;
+  return (
+    <NextLink
+      href={href}
+      className="block truncate text-xs text-zinc-400 hover:text-zinc-200"
+      {...rest}
+    >
+      {`${href}`}
+    </NextLink>
+  );
+};
+
+const Description = (props: ComponentProps<"span">) => {
+  const { children, className, ...rest } = props;
+  return (
+    <span
+      className={cn("block truncate text-sm text-zinc-400", className)}
+      {...rest}
+    >
+      {children}
+    </span>
+  );
+};
+
+const IconContainer = (props: ComponentProps<"div">) => {
+  const { children, ...rest } = props;
+  return <div {...rest}>{children}</div>;
+};
+
+InfoCard.ContentContainer = ContentContainer;
+InfoCard.Title = Title;
+InfoCard.Link = Link;
+InfoCard.Description = Description;
+InfoCard.IconContainer = IconContainer;

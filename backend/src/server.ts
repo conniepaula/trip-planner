@@ -19,6 +19,7 @@ import { getTripDetails } from "./routes/get-trip-details";
 import { getParticipant } from "./routes/get-participant";
 import { errorHandler } from "./error-handler";
 import { env } from "./env";
+import { deleteParticipant } from "./routes/delete-participant";
 
 const app = fastify();
 
@@ -29,19 +30,27 @@ app.setSerializerCompiler(serializerCompiler);
 
 app.setErrorHandler(errorHandler);
 
+// Trip
 app.register(createTrip);
 app.register(confirmTrip);
 app.register(updateTrip);
 app.register(getTripDetails);
+
+// Participants
 app.register(confirmParticipant);
-app.register(createActivity);
-app.register(getActivities);
-app.register(createLink);
-app.register(getLinks);
 app.register(getParticipant);
 app.register(getParticipants);
 app.register(createInvite);
+app.register(deleteParticipant);
+
+// Activities
+app.register(createActivity);
+app.register(getActivities);
+
+// Links
+app.register(createLink);
+app.register(getLinks);
 
 app.listen({ port: env.PORT }).then(() => {
-  console.log("Server running on PORT 3333");
+  console.log(`Server running on PORT ${env.PORT}`);
 });

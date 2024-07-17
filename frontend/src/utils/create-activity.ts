@@ -5,11 +5,10 @@ import { z } from "zod";
 const activityFormSchema = z.object({
   title: z.string(),
   occurs_at: z.coerce.date(),
-  trip_id: z.string().uuid(),
 });
 
 const activityCreationResponseSchema = z.object({
-  activity_id: z.string().uuid(),
+  activityId: z.string().uuid(),
 });
 
 export type ActivityCreationResponse = z.infer<
@@ -24,19 +23,19 @@ function assertIsActivityCreationResponse(
   }
 }
 
-export async function createActivity(data: FormData) {
+export async function createActivity(data: FormData, tripId: string) {
   const formData = Object.fromEntries(data);
 
   const parsedData = activityFormSchema.safeParse(formData);
 
   if (!parsedData.success) {
-    return { message: "Invalid activity form data." };
+    throw new Error("Invalid activity creation form data.");
   }
 
-  const { occurs_at, title, trip_id } = parsedData.data;
+  const { title, occurs_at } = parsedData.data;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/trips/${trip_id}/activities`,
+    `${process.env.NEXT_PUBLIC_API_URL}/trips/${tripId}/activities`,
     {
       method: "POST",
       headers: {

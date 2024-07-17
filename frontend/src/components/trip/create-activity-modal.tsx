@@ -1,3 +1,5 @@
+"use client";
+
 import { Calendar, Tag } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -5,9 +7,10 @@ import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { createActivity } from "@/utils/create-activity";
-import Button from "../ui/button";
-import Modal from "../ui/modal";
-import Input from "../ui/input";
+import Button from "@/components/ui/button";
+import Modal from "@/components/ui/modal";
+import Input from "@/components/ui/input";
+import { useTrip } from "@/contexts/trip-context";
 
 interface CreateActivityModalProps {
   closeCreateActivityModal: () => void;
@@ -23,7 +26,9 @@ type CreateActivityFormValues = z.infer<typeof createActivityFormSchema>;
 export default function CreateActivityModal(props: CreateActivityModalProps) {
   const { closeCreateActivityModal } = props;
   const { tripId } = useParams();
-  const { handleSubmit, register } = useForm<CreateActivityFormValues>({
+  const { addActivity } = useTrip();
+
+  const { handleSubmit, register, reset } = useForm<CreateActivityFormValues>({
     resolver: zodResolver(createActivityFormSchema),
   });
 
@@ -33,8 +38,17 @@ export default function CreateActivityModal(props: CreateActivityModalProps) {
     activityFormData.append("occurs_at", String(data.occurs_at));
     activityFormData.append("trip_id", String(tripId));
 
-    await createActivity(activityFormData);
-    closeCreateActivityModal();
+    try {
+      const { activityId } = await createActivity(
+        activityFormData,
+        String(tripId),
+      );
+      addActivity(activityId, data.title, data.occurs_at);
+      reset();
+      // closeCreateActivityModal();
+    } catch (err) {
+      alert("There was an creating the activity.");
+    }
   };
 
   return (

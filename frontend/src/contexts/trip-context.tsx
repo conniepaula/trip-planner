@@ -1,6 +1,10 @@
 "use client";
 
-import { setLinksAction, setParticipantsAction } from "@/reducers/trip/actions";
+import {
+  setActivitiesAction,
+  setLinksAction,
+  setParticipantsAction,
+} from "@/reducers/trip/actions";
 import { tripReducer, TripState } from "@/reducers/trip/reducer";
 import { isSameDay } from "date-fns";
 import { ReactNode, createContext, useContext, useReducer } from "react";
@@ -63,7 +67,9 @@ export function TripProvider(props: TripProviderProps) {
           ],
         };
       }
+      return activitiesInDate;
     });
+    dispatch(setActivitiesAction(updatedActivities));
   };
 
   const value = {

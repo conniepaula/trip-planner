@@ -193,9 +193,6 @@ export default function CreateTripForm() {
       action={createTrip}
       className="space-y-4"
     >
-      {selectedDates
-        ? `${selectedDates?.from} ${selectedDates?.to}`
-        : "No date picked"}
       <div className="flex flex-col items-start gap-3 rounded-xl bg-zinc-900 px-4 py-3 shadow-sm sm:flex-row sm:items-center">
         <TripInput
           disabled={isGuestInputOpen}

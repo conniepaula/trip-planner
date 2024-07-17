@@ -211,14 +211,14 @@ export default function CreateTripForm() {
           <span
             className={cn(
               "text-lg",
-              selectedDates ? "text-zinc-100" : "text-zinc-400",
+              selectedDates ? "text-foreground" : "text-zinc-400",
             )}
           >
             {dateToDisplay}
           </span>
         </button>
 
-        <div className="hidden h-6 w-px bg-zinc-800 sm:block" />
+        <div className="bg-muted hidden h-6 w-px sm:block" />
 
         {isGuestInputOpen ? (
           <Button
@@ -247,7 +247,7 @@ export default function CreateTripForm() {
             <UserRoundPlus className="size-5 text-zinc-400" />
             <span className="flex-1 text-lg text-zinc-400">
               {participants?.length > 0 ? (
-                <span className="flex-1 text-lg text-zinc-100">{`${participants?.length} guest(s)`}</span>
+                <span className="text-zinc-5 flex-1 text-lg">{`${participants?.length} guest(s)`}</span>
               ) : (
                 <span className="flex-1 text-lg text-zinc-400">
                   Who is coming?
@@ -256,7 +256,7 @@ export default function CreateTripForm() {
             </span>
           </button>
 
-          <div className="hidden h-6 w-px bg-zinc-800 sm:block" />
+          <div className="bg-muted hidden h-6 w-px sm:block" />
 
           <Button onClick={openConfirmModal}>
             Confirm trip
@@ -314,7 +314,7 @@ export default function CreateTripForm() {
             {participants?.map((participant) => (
               <div
                 key={participant.email}
-                className="flex items-center gap-2 rounded-md bg-zinc-800 px-2.5 py-1.5"
+                className="bg-muted flex items-center gap-2 rounded-md px-2.5 py-1.5"
               >
                 <span className="text-zinc-300">{participant.email}</span>
                 <button
@@ -326,8 +326,8 @@ export default function CreateTripForm() {
               </div>
             ))}
           </div>
-          <div className="h-px w-full bg-zinc-800" />
-          <div className="flex flex-col items-start gap-3 rounded-xl bg-zinc-950 px-4 py-3 shadow-sm sm:flex-row sm:items-center">
+          <div className="bg-muted h-px w-full" />
+          <div className="bg-background flex flex-col items-start gap-3 rounded-xl px-4 py-3 shadow-sm sm:flex-row sm:items-center">
             <TripInput
               icon={User}
               placeholder="Guest name"
@@ -357,7 +357,7 @@ export default function CreateTripForm() {
               }
             />
 
-            <div className="hidden h-6 w-px bg-zinc-800 sm:block" />
+            <div className="bg-muted hidden h-6 w-px sm:block" />
 
             <Button
               type="button"
@@ -379,11 +379,11 @@ export default function CreateTripForm() {
             </Modal.Title>
             <Modal.Description>
               Fill out the form below to confirm your trip to{" "}
-              <span className="font-semibold text-zinc-100">
+              <span className="text-foreground font-semibold">
                 {getValues("destination")}
               </span>{" "}
               on{" "}
-              <span className="font-semibold text-zinc-100">
+              <span className="text-foreground font-semibold">
                 {format(getValues("date.from"), "MMMM do")}
               </span>
               .

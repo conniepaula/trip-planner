@@ -100,7 +100,7 @@ export default function GuestManagementModal(props: GuestManagementModalProps) {
         </div>
         <form
           onSubmit={handleSubmit(createNewGuest)}
-          className="flex flex-col items-start gap-3 rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3 shadow-sm sm:flex-row sm:items-center"
+          className="bg-background border-muted flex flex-col items-start gap-3 rounded-xl border px-4 py-3 shadow-sm sm:flex-row sm:items-center"
         >
           <TripInput
             icon={User}
@@ -115,7 +115,7 @@ export default function GuestManagementModal(props: GuestManagementModalProps) {
             {...register("email")}
           />
 
-          <div className="hidden h-6 w-px bg-zinc-800 sm:block" />
+          <div className="bg-muted hidden h-6 w-px sm:block" />
 
           <Button type="submit" className="w-full sm:w-auto">
             Invite

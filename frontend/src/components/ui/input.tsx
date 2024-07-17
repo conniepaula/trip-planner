@@ -8,7 +8,7 @@ interface InputProps extends ComponentProps<"input"> {
 const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const { icon: Icon, className, ...rest } = props;
   return (
-    <div className="flex h-14 items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-4">
+    <div className="bg-background border-muted flex h-14 items-center gap-2 rounded-lg border px-4">
       {Icon && <Icon className="size-5 text-zinc-400" />}
       <input
         ref={ref}

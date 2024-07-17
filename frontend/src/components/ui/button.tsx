@@ -8,16 +8,13 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: " bg-rose-300 text-rose-950 hover:bg-rose-400",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        neutral: "bg-zinc-800 text-zinc-200 hover:bg-zinc-700",
+        primary: " bg-primary text-primary-foreground hover:bg-primary-hover",
+        neutral: "bg-muted text-zinc-200 hover:bg-muted-hover",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive-hover",
         outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "border border-input bg-zinc-500 shadow-sm hover:bg-muted hover:text-muted-foreground",
+        ghost: "hover:bg-zinc-600 hover:text-foreground",
       },
       size: {
         default: "px-5 py-2",

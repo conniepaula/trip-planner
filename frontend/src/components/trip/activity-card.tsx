@@ -24,8 +24,8 @@ export default function ActivityCard(props: ActivityCardProps) {
               key={activity.id}
               className="flex items-center gap-3 rounded-xl bg-zinc-900 px-4 py-2.5 shadow-sm"
             >
-              <MapPin className="size-5 text-rose-300" />
-              <span className="text-zinc-100">{activity.title}</span>
+              <MapPin className="text-primary size-5" />
+              <span>{activity.title}</span>
               <span className="ml-auto text-sm text-zinc-400">
                 {format(activity.occurs_at, "k:mm")}
               </span>

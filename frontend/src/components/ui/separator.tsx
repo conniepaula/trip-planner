@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
 
-export const separatorVariants = cva("bg-zinc-800", {
+export const separatorVariants = cva("bg-muted", {
   variants: {
     direction: {
       horizontal: "h-px",

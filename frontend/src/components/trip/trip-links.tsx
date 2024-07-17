@@ -22,19 +22,25 @@ export default function TripLinks() {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-6">
-        {links.map((link) => (
-          <InfoCard key={link.id}>
-            <InfoCard.ContentContainer>
-              <InfoCard.Title>{link.title}</InfoCard.Title>
-              <InfoCard.Link href={link.url} />
-            </InfoCard.ContentContainer>
-            <InfoCard.IconContainer>
-              <Link2 className="size-5 text-zinc-400" />
-            </InfoCard.IconContainer>
-          </InfoCard>
-        ))}
-      </div>
+      {links.length > 0 ? (
+        <div className="space-y-6">
+          {links.map((link) => (
+            <InfoCard key={link.id}>
+              <InfoCard.ContentContainer>
+                <InfoCard.Title>{link.title}</InfoCard.Title>
+                <InfoCard.Link href={link.url} />
+              </InfoCard.ContentContainer>
+              <InfoCard.IconContainer>
+                <Link2 className="size-5 text-zinc-400" />
+              </InfoCard.IconContainer>
+            </InfoCard>
+          ))}
+        </div>
+      ) : (
+        <span className="block text-xs text-zinc-400">
+          No links have added to this trip.
+        </span>
+      )}
       <Button
         onClick={openCreateLinkModal}
         variant="neutral"

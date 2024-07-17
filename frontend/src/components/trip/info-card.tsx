@@ -20,11 +20,7 @@ const ContentContainer = (props: ComponentProps<"div">) => {
 
 const Title = (props: ComponentProps<"span">) => {
   const { children, className, ...rest } = props;
-  return (
-    <span className={cn("block font-medium text-zinc-100", className)}>
-      {children}
-    </span>
-  );
+  return <span className={cn("block font-medium", className)}>{children}</span>;
 };
 
 const Link = (props: LinkProps) => {

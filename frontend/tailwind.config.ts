@@ -8,6 +8,27 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        background: "#09090b",
+        foreground: "#f4f4f5",
+        primary: {
+          DEFAULT: "#fda4af",
+          foreground: "#4c0519",
+          hover: "#fecdd3",
+        },
+        muted: {
+          DEFAULT: "#27272a",
+          foreground: "#a1a1aa",
+          hover: "#3f3f46",
+        },
+        destructive: {
+          DEFAULT: "#9f1239",
+          foreground: "#fafafa",
+          hover: "#e11d48",
+        },
+        border: "#27272a",
+        ring: "#fb7185",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

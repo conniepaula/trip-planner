@@ -70,7 +70,7 @@ export default function CreateActivityModal(props: CreateActivityModalProps) {
             {...register("title")}
           />
 
-          <div className="flex h-14 items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950 px-4">
+          <div className="bg-background border-muted flex h-14 items-center gap-2 rounded-lg border px-4">
             <Calendar className="size-5 text-zinc-400" />
             <input
               type="datetime-local"

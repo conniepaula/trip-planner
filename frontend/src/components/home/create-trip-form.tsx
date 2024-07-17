@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { useReducer } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { format } from "date-fns";
+import { endOfDay, format } from "date-fns";
 
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
@@ -193,6 +193,9 @@ export default function CreateTripForm() {
       action={createTrip}
       className="space-y-4"
     >
+      {selectedDates
+        ? `${selectedDates?.from} ${selectedDates?.to}`
+        : "No date picked"}
       <div className="flex flex-col items-start gap-3 rounded-xl bg-zinc-900 px-4 py-3 shadow-sm sm:flex-row sm:items-center">
         <TripInput
           disabled={isGuestInputOpen}
@@ -284,7 +287,14 @@ export default function CreateTripForm() {
                 <DayPicker
                   mode="range"
                   disabled={{ before: new Date() }}
-                  onSelect={(dateRange) => field.onChange(dateRange)}
+                  onSelect={(dateRange) => {
+                    if (dateRange) {
+                      field.onChange({
+                        from: dateRange.from,
+                        to: dateRange.to ? endOfDay(dateRange.to) : undefined,
+                      });
+                    }
+                  }}
                   selected={field.value}
                 />
               )}

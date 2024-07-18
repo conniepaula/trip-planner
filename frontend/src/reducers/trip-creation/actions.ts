@@ -4,7 +4,6 @@ export enum TripCreationActionTypes {
   SET_IS_GUEST_INPUT_OPEN = "SET_IS_GUEST_INPUT_OPEN",
   SET_IS_INVITE_GUEST_MODAL_OPEN = "SET_IS_INVITE_GUEST_MODAL_OPEN",
   SET_IS_CONFIRM_MODAL_OPEN = "SET_IS_CONFIRM_MODAL_OPEN",
-  SET_IS_DATE_PICKER_OPEN = "SET_IS_DATE_PICKER_OPEN",
   SET_CURRENT_PARTICIPANT = "SET_CURRENT_PARTICIPANT",
   SET_FORM_STEP = "SET_FORM_STEP",
 }
@@ -31,12 +30,6 @@ export function setIsConfirmModalOpenAction(isConfirmModalOpen: boolean) {
   return {
     type: TripCreationActionTypes.SET_IS_CONFIRM_MODAL_OPEN,
     payload: isConfirmModalOpen,
-  };
-}
-export function setIsDatePickerOpenAction(isDatePickerOpen: boolean) {
-  return {
-    type: TripCreationActionTypes.SET_IS_DATE_PICKER_OPEN,
-    payload: isDatePickerOpen,
   };
 }
 export function setFormStepAction(

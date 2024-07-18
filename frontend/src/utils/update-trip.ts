@@ -14,7 +14,6 @@ export async function updateTrip(data: FormData, tripId: string) {
   let formData = Object.fromEntries(data);
 
   const parsed = tripDetailsFormSchema.safeParse(formData);
-  console.log(parsed.data?.ends_at, parsed.data?.starts_at);
 
   if (!parsed.success) {
     throw new Error("Invalid trip update form data");

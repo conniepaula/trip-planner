@@ -1,10 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
 import {
   MapPin,
-  Calendar,
   ArrowRight,
   UserRoundPlus,
   Settings2,
@@ -34,10 +31,9 @@ import {
   setCurrentParticipantAction,
   setFormStepAction,
   setIsConfirmModalOpenAction,
-  setIsDatePickerOpenAction,
   setIsInviteGuestModalOpenAction,
 } from "@/reducers/trip-creation/actions";
-import { cn } from "@/lib/utils";
+import DatePickerInput from "./trip-date-picker";
 
 const participantSchema = z.object({
   name: z.string().min(2, "Min 2 characters"),
@@ -63,8 +59,6 @@ const formSteps = [
   { id: 2, fields: ["participantsToInvite"] },
   { id: 3, fields: ["ownerName", "ownerEmail"] },
 ];
-
-// TODO: Display type safety errors below inputs
 
 export default function CreateTripForm() {
   const {
@@ -145,14 +139,6 @@ export default function CreateTripForm() {
     }
   };
 
-  const openDatePicker = () => {
-    dispatch(setIsDatePickerOpenAction(true));
-  };
-
-  const closeDatePicker = () => {
-    dispatch(setIsDatePickerOpenAction(false));
-  };
-
   const openInviteGuestModal = () => {
     dispatch(setIsInviteGuestModalOpenAction(true));
   };
@@ -202,7 +188,33 @@ export default function CreateTripForm() {
           placeholder="Where are you going?"
           {...register("destination")}
         />
-        <button
+
+        <Controller
+          name="date"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <DatePickerInput
+              mode="range"
+              id="trip-dates"
+              label="Trip dates"
+              placeholder="When is your trip?"
+              // TODO: Figure out how to display date picker errors
+              disabled={{ before: new Date() }}
+              onSelect={(dateRange) => {
+                if (dateRange) {
+                  field.onChange({
+                    from: dateRange.from,
+                    to: dateRange.to ? endOfDay(dateRange.to) : undefined,
+                  });
+                }
+              }}
+              selected={field.value}
+            />
+          )}
+        />
+
+        {/* <button
           onClick={openDatePicker}
           disabled={isGuestInputOpen}
           className="flex items-center gap-2 text-left"
@@ -216,7 +228,7 @@ export default function CreateTripForm() {
           >
             {dateToDisplay}
           </span>
-        </button>
+        </button> */}
 
         <div className="hidden h-6 w-px bg-muted sm:block" />
 
@@ -237,6 +249,7 @@ export default function CreateTripForm() {
         )}
       </div>
 
+      {/* TODO: Add slide down animation */}
       {isGuestInputOpen && (
         <div className="flex flex-col gap-3 rounded-xl bg-zinc-900 px-4 py-3 shadow-sm sm:flex-row sm:items-center">
           <button
@@ -250,7 +263,7 @@ export default function CreateTripForm() {
                 <span className="text-zinc-5 flex-1 text-lg">{`${participants?.length} guest(s)`}</span>
               ) : (
                 <span className="flex-1 text-lg text-zinc-400">
-                  Who is coming?
+                  Who else is coming?
                 </span>
               )}
             </span>
@@ -263,41 +276,6 @@ export default function CreateTripForm() {
             <ArrowRight className="size-5" />
           </Button>
         </div>
-      )}
-
-      {isDatePickerOpen && (
-        <Modal>
-          <Modal.Header>
-            <Modal.Title closeModal={closeDatePicker}>
-              <h2 className="text-lg font-semibold">Trip dates</h2>
-            </Modal.Title>
-            <Modal.Description>
-              Select the start and end date of your trip.
-            </Modal.Description>
-          </Modal.Header>
-          <div className="flex justify-center">
-            <Controller
-              name="date"
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <DayPicker
-                  mode="range"
-                  disabled={{ before: new Date() }}
-                  onSelect={(dateRange) => {
-                    if (dateRange) {
-                      field.onChange({
-                        from: dateRange.from,
-                        to: dateRange.to ? endOfDay(dateRange.to) : undefined,
-                      });
-                    }
-                  }}
-                  selected={field.value}
-                />
-              )}
-            />
-          </div>
-        </Modal>
       )}
 
       {isInviteGuestModalOpen && (
@@ -415,6 +393,14 @@ export default function CreateTripForm() {
           </div>
         </Modal>
       )}
+      <div className="space-y-1 text-left">
+        {/*  TODO: Add trip dates selection error  */}
+        {errors.destination?.message && (
+          <span className="ml-1 text-red-500">
+            {errors.destination?.message}
+          </span>
+        )}
+      </div>
     </form>
   );
 }

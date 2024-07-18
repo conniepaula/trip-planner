@@ -4,12 +4,18 @@ import {
   setActivitiesAction,
   setLinksAction,
   setParticipantsAction,
+  setTripDetailsAction,
 } from "@/reducers/trip/actions";
 import { tripReducer, TripState } from "@/reducers/trip/reducer";
 import { isSameDay } from "date-fns";
 import { ReactNode, createContext, useContext, useReducer } from "react";
 
 interface TripContextType extends TripState {
+  updateTripDetails: (
+    destination: string,
+    starts_at: Date,
+    ends_at: Date,
+  ) => void;
   addParticipant: (id: string, name: string, email: string) => void;
   removeParticipant: (id: string) => void;
   addLink: (id: string, title: string, url: string) => void;
@@ -28,6 +34,14 @@ export function TripProvider(props: TripProviderProps) {
   const [tripState, dispatch] = useReducer(tripReducer, initialValue);
   const { trip, participants, activities, links } =
     tripState as TripContextType;
+
+  const updateTripDetails = (
+    destination: string,
+    starts_at: Date,
+    ends_at: Date,
+  ) => {
+    dispatch(setTripDetailsAction(destination, starts_at, ends_at));
+  };
 
   const addParticipant = (id: string, name: string, email: string) => {
     const updatedParticipants = participants.concat({
@@ -82,6 +96,7 @@ export function TripProvider(props: TripProviderProps) {
     addLink,
     removeLink,
     addActivity,
+    updateTripDetails,
   };
 
   return <TripContext.Provider value={value}>{children}</TripContext.Provider>;

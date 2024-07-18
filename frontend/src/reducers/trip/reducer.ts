@@ -16,7 +16,7 @@ export function tripReducer(state: TripState, action: TripAction) {
     case TripActionTypes.SET_LINKS:
       return { ...state, links: action.payload };
     case TripActionTypes.SET_TRIP_DETAILS:
-      return { ...state, trip: action.payload };
+      return { ...state, trip: { ...state.trip, ...action.payload } };
 
     default:
       throw new Error();

@@ -9,6 +9,17 @@ export enum TripActionTypes {
 
 export type TripAction = Action<TripActionTypes>;
 
+export function setTripDetailsAction(
+  destination: string,
+  starts_at: Date,
+  ends_at: Date,
+) {
+  return {
+    type: TripActionTypes.SET_TRIP_DETAILS,
+    payload: { destination, starts_at, ends_at },
+  };
+}
+
 export function setParticipantsAction(participants: Array<Participant>) {
   return {
     type: TripActionTypes.SET_PARTICIPANTS,

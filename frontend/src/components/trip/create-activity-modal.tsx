@@ -17,7 +17,7 @@ interface CreateActivityModalProps {
 }
 
 const createActivityFormSchema = z.object({
-  title: z.string().min(5),
+  title: z.string().min(5, "Activity title must have at least 5 characters."),
   occurs_at: z.coerce.date(),
 });
 
@@ -25,10 +25,14 @@ type CreateActivityFormValues = z.infer<typeof createActivityFormSchema>;
 
 export default function CreateActivityModal(props: CreateActivityModalProps) {
   const { closeCreateActivityModal } = props;
-  const { tripId } = useParams();
-  const { addActivity } = useTrip();
+  const { addActivity, trip } = useTrip();
 
-  const { handleSubmit, register, reset } = useForm<CreateActivityFormValues>({
+  const {
+    handleSubmit,
+    register,
+    reset,
+    formState: { errors },
+  } = useForm<CreateActivityFormValues>({
     resolver: zodResolver(createActivityFormSchema),
   });
 
@@ -36,12 +40,12 @@ export default function CreateActivityModal(props: CreateActivityModalProps) {
     const activityFormData = new FormData();
     activityFormData.append("title", data.title);
     activityFormData.append("occurs_at", String(data.occurs_at));
-    activityFormData.append("trip_id", String(tripId));
+    activityFormData.append("trip_id", String(trip.id));
 
     try {
       const { activityId } = await createActivity(
         activityFormData,
-        String(tripId),
+        String(trip.id),
       );
       addActivity(activityId, data.title, data.occurs_at);
       reset();
@@ -65,20 +69,23 @@ export default function CreateActivityModal(props: CreateActivityModalProps) {
       <form className="space-y-3" onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
           <Input
+            id="activity-title"
+            label="Activity title"
+            error={errors.title?.message}
             placeholder="What's the activity?"
             icon={Tag}
             {...register("title")}
           />
-
-          <div className="bg-background border-muted flex h-14 items-center gap-2 rounded-lg border px-4">
-            <Calendar className="size-5 text-zinc-400" />
-            <input
-              type="datetime-local"
-              placeholder="Select date and time"
-              className="flex-1 bg-transparent text-lg placeholder-zinc-400 outline-none"
-              {...register("occurs_at")}
-            />
-          </div>
+          {/* // TODO: Add a custom date and time selector with date validation */}
+          <Input
+            id="activity-occurs-at"
+            label="Date and time"
+            error={errors.occurs_at?.message}
+            type="datetime-local"
+            placeholder="Select date and time"
+            icon={Calendar}
+            {...register("occurs_at")}
+          />
         </div>
         <Button type="submit" size="full">
           Create activity

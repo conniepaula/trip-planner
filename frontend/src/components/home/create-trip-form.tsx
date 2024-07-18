@@ -218,7 +218,7 @@ export default function CreateTripForm() {
           </span>
         </button>
 
-        <div className="bg-muted hidden h-6 w-px sm:block" />
+        <div className="hidden h-6 w-px bg-muted sm:block" />
 
         {isGuestInputOpen ? (
           <Button
@@ -256,7 +256,7 @@ export default function CreateTripForm() {
             </span>
           </button>
 
-          <div className="bg-muted hidden h-6 w-px sm:block" />
+          <div className="hidden h-6 w-px bg-muted sm:block" />
 
           <Button onClick={openConfirmModal}>
             Confirm trip
@@ -314,7 +314,7 @@ export default function CreateTripForm() {
             {participants?.map((participant) => (
               <div
                 key={participant.email}
-                className="bg-muted flex items-center gap-2 rounded-md px-2.5 py-1.5"
+                className="flex items-center gap-2 rounded-md bg-muted px-2.5 py-1.5"
               >
                 <span className="text-zinc-300">{participant.email}</span>
                 <button
@@ -326,8 +326,8 @@ export default function CreateTripForm() {
               </div>
             ))}
           </div>
-          <div className="bg-muted h-px w-full" />
-          <div className="bg-background flex flex-col items-start gap-3 rounded-xl px-4 py-3 shadow-sm sm:flex-row sm:items-center">
+          <div className="h-px w-full bg-muted" />
+          <div className="flex flex-col items-start gap-3 rounded-xl bg-background px-4 py-3 shadow-sm sm:flex-row sm:items-center">
             <TripInput
               icon={User}
               placeholder="Guest name"
@@ -357,7 +357,7 @@ export default function CreateTripForm() {
               }
             />
 
-            <div className="bg-muted hidden h-6 w-px sm:block" />
+            <div className="hidden h-6 w-px bg-muted sm:block" />
 
             <Button
               type="button"
@@ -379,11 +379,11 @@ export default function CreateTripForm() {
             </Modal.Title>
             <Modal.Description>
               Fill out the form below to confirm your trip to{" "}
-              <span className="text-foreground font-semibold">
+              <span className="font-semibold text-foreground">
                 {getValues("destination")}
               </span>{" "}
               on{" "}
-              <span className="text-foreground font-semibold">
+              <span className="font-semibold text-foreground">
                 {format(getValues("date.from"), "MMMM do")}
               </span>
               .
@@ -393,13 +393,19 @@ export default function CreateTripForm() {
           <div className="space-y-3">
             <div className="space-y-2">
               <Input
+                id="owner-name"
+                label="Your name"
                 placeholder="Your full name"
                 icon={User}
+                error={errors.ownerName?.message}
                 {...register("ownerName")}
               />
               <Input
+                id="owner-email"
+                label="Your personal email"
                 placeholder="Your personal email"
                 icon={Mail}
+                error={errors.ownerEmail?.message}
                 {...register("ownerEmail")}
               />
             </div>

@@ -20,7 +20,10 @@ const detailsFormSchema = z.object({
   destination: z
     .string()
     .min(2, "Destination must have at least 2 characters."),
-  date: z.object({ from: z.date(), to: z.date() }),
+  date: z.object({
+    from: z.date({ message: "Invalid trip start date." }),
+    to: z.date({ message: "Invalid trip end date." }),
+  }),
 });
 
 type DetailsFormValues = z.infer<typeof detailsFormSchema>;
@@ -29,14 +32,19 @@ export default function ChangeDetailsModal(props: ChangeDetailsModalProps) {
   const { closeChangeDetailsModal } = props;
   const { trip, updateTripDetails } = useTrip();
 
-  const { register, handleSubmit, control, watch, formState } =
-    useForm<DetailsFormValues>({
-      resolver: zodResolver(detailsFormSchema),
-      defaultValues: {
-        destination: trip.destination,
-        date: { from: trip.starts_at, to: trip.ends_at } as DateRange,
-      },
-    });
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors },
+  } = useForm<DetailsFormValues>({
+    resolver: zodResolver(detailsFormSchema),
+    defaultValues: {
+      destination: trip.destination,
+      date: { from: trip.starts_at, to: trip.ends_at } as DateRange,
+    },
+  });
 
   const changeDetails = async (data: DetailsFormValues) => {
     const formData = new FormData();
@@ -71,6 +79,9 @@ export default function ChangeDetailsModal(props: ChangeDetailsModalProps) {
       <form onSubmit={handleSubmit(changeDetails)} className="space-y-3">
         <div className="space-y-2">
           <Input
+            id="destination"
+            label="Trip destination"
+            error={errors.destination?.message}
             placeholder="Where are you going?"
             icon={MapPin}
             {...register("destination")}
@@ -82,7 +93,11 @@ export default function ChangeDetailsModal(props: ChangeDetailsModalProps) {
             render={({ field }) => (
               <DatePickerInput
                 mode="range"
+                id="trip-dates"
+                label="Trip dates"
                 placeholder="When is your trip?"
+                // TODO: Figure out how to display date picker errors
+                error={errors.date?.message}
                 disabled={{ before: new Date() }}
                 onSelect={(dateRange) => {
                   if (dateRange) {

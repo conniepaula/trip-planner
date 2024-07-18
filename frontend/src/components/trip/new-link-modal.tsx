@@ -26,7 +26,12 @@ export default function NewLinkModal(props: NewLinkModalProps) {
   const { closeNewLinkModal } = props;
   const { tripId } = useParams();
   const { addLink } = useTrip();
-  const { register, handleSubmit, reset } = useForm<CreateLinkFormValues>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CreateLinkFormValues>({
     resolver: zodResolver(createLinkFormSchema),
     defaultValues: { title: "", url: "" },
   });
@@ -58,11 +63,21 @@ export default function NewLinkModal(props: NewLinkModalProps) {
         <form onSubmit={handleSubmit(createNewLink)} className="space-y-3">
           <div className="space-y-2">
             <Input
+              id="title"
+              label="Link title"
+              error={errors.title?.message}
               icon={Pencil}
               placeholder="Link title"
               {...register("title")}
             />
-            <Input icon={Link2} placeholder="Link URL" {...register("url")} />
+            <Input
+              id="url"
+              label="Link URL"
+              error={errors.url?.message}
+              icon={Link2}
+              placeholder="Link URL"
+              {...register("url")}
+            />
           </div>
           <Button type="submit" size="full">
             Add new link

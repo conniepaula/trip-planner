@@ -18,6 +18,7 @@ import Button from "@/components/ui/button";
 import { inviteParticipant } from "@/utils/invite-participant";
 import { deleteParticipant } from "@/utils/delete-participant";
 import InfoCard from "./info-card";
+import { toast } from "sonner";
 
 const inviteGuestFormSchema = z.object({
   name: z.string().min(2, "Guest name must have at least two characters."),
@@ -32,7 +33,12 @@ interface GuestManagementModalProps {
 
 export default function GuestManagementModal(props: GuestManagementModalProps) {
   const { closeGuestManagementModal } = props;
-  const { register, handleSubmit, reset } = useForm<InviteGuestFormValues>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<InviteGuestFormValues>({
     resolver: zodResolver(inviteGuestFormSchema),
     defaultValues: { name: "", email: "" },
   });
@@ -52,9 +58,9 @@ export default function GuestManagementModal(props: GuestManagementModalProps) {
       );
       addParticipant(participantId, data.name, data.email);
       reset();
+      toast.success("Guest added successfully.");
     } catch (err) {
-      // TODO: Add toast component
-      alert("Error creating participant");
+      toast.error("There was an error adding the new guest. Please try again.");
     }
   };
 
@@ -62,9 +68,9 @@ export default function GuestManagementModal(props: GuestManagementModalProps) {
     try {
       const { participantId } = await deleteParticipant(id);
       removeParticipant(participantId);
+      toast.success("Guest deleted successfully.");
     } catch (err) {
-      // TODO: Add toast component
-      alert(`Error deleting participant ${id}`);
+      toast.success(`Error deleting participant ${id}.`);
     }
   };
 
@@ -100,7 +106,7 @@ export default function GuestManagementModal(props: GuestManagementModalProps) {
         </div>
         <form
           onSubmit={handleSubmit(createNewGuest)}
-          className="bg-background border-muted flex flex-col items-start gap-3 rounded-xl border px-4 py-3 shadow-sm sm:flex-row sm:items-center"
+          className="flex flex-col items-start gap-3 rounded-xl border border-muted bg-background px-4 py-3 shadow-sm sm:flex-row sm:items-center"
         >
           <TripInput
             icon={User}
@@ -115,9 +121,13 @@ export default function GuestManagementModal(props: GuestManagementModalProps) {
             {...register("email")}
           />
 
-          <div className="bg-muted hidden h-6 w-px sm:block" />
+          <div className="hidden h-6 w-px bg-muted sm:block" />
 
-          <Button type="submit" className="w-full sm:w-auto">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full sm:w-auto"
+          >
             Invite
             <Plus className="size-5" />
           </Button>

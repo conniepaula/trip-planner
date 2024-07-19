@@ -3,7 +3,6 @@
 import { Calendar, Tag } from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { createActivity } from "@/utils/create-activity";
@@ -11,6 +10,7 @@ import Button from "@/components/ui/button";
 import Modal from "@/components/ui/modal";
 import Input from "@/components/ui/input";
 import { useTrip } from "@/contexts/trip-context";
+import { toast } from "sonner";
 
 interface CreateActivityModalProps {
   closeCreateActivityModal: () => void;
@@ -31,7 +31,7 @@ export default function CreateActivityModal(props: CreateActivityModalProps) {
     handleSubmit,
     register,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CreateActivityFormValues>({
     resolver: zodResolver(createActivityFormSchema),
   });
@@ -49,9 +49,10 @@ export default function CreateActivityModal(props: CreateActivityModalProps) {
       );
       addActivity(activityId, data.title, data.occurs_at);
       reset();
-      // closeCreateActivityModal();
+      closeCreateActivityModal();
+      toast.success("Activity created successfully.");
     } catch (err) {
-      alert("There was an creating the activity.");
+      toast.error("There was an creating the activity.");
     }
   };
 
@@ -87,7 +88,7 @@ export default function CreateActivityModal(props: CreateActivityModalProps) {
             {...register("occurs_at")}
           />
         </div>
-        <Button type="submit" size="full">
+        <Button type="submit" disabled={isSubmitting} size="full">
           Create activity
         </Button>
       </form>

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { MapPin } from "lucide-react";
 import { endOfDay } from "date-fns";
 import { DateRange } from "react-day-picker";
+import { toast } from "sonner";
 
 import Modal from "../ui/modal";
 import { useTrip } from "@/contexts/trip-context";
@@ -21,8 +22,8 @@ const detailsFormSchema = z.object({
     .string()
     .min(2, "Destination must have at least 2 characters."),
   date: z.object({
-    from: z.date({ message: "Invalid trip start date." }),
-    to: z.date({ message: "Invalid trip end date." }),
+    from: z.coerce.date({ message: "Invalid trip start date." }),
+    to: z.coerce.date({ message: "Invalid trip end date." }),
   }),
 });
 
@@ -36,8 +37,8 @@ export default function ChangeDetailsModal(props: ChangeDetailsModalProps) {
     register,
     handleSubmit,
     control,
-    watch,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<DetailsFormValues>({
     resolver: zodResolver(detailsFormSchema),
     defaultValues: {
@@ -51,13 +52,14 @@ export default function ChangeDetailsModal(props: ChangeDetailsModalProps) {
     formData.append("destination", data.destination);
     formData.append("starts_at", String(data.date.from));
     formData.append("ends_at", String(data.date.to));
-
     try {
       await updateTrip(formData, trip.id);
       updateTripDetails(data.destination, data.date.from, data.date.to);
+      reset();
+      closeChangeDetailsModal();
+      toast("Trip details successfully changed.");
     } catch (err) {
-      // TODO: Add toast
-      console.log(err);
+      toast.error(`There was an error updating your trip details: ${err}`);
     }
   };
 
@@ -112,7 +114,7 @@ export default function ChangeDetailsModal(props: ChangeDetailsModalProps) {
             )}
           />
         </div>
-        <Button type="submit" size="full">
+        <Button type="submit" disabled={!isDirty || isSubmitting} size="full">
           Update details
         </Button>
       </form>

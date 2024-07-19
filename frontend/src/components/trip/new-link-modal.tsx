@@ -11,6 +11,7 @@ import Modal from "@/components/ui/modal";
 import Input from "@/components/ui/input";
 import { createLink } from "@/utils/create-link";
 import { useTrip } from "@/contexts/trip-context";
+import { toast } from "sonner";
 
 const createLinkFormSchema = z.object({
   title: z.string().min(2, "Link title must have at least three characters."),
@@ -30,7 +31,7 @@ export default function NewLinkModal(props: NewLinkModalProps) {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<CreateLinkFormValues>({
     resolver: zodResolver(createLinkFormSchema),
     defaultValues: { title: "", url: "" },
@@ -45,8 +46,10 @@ export default function NewLinkModal(props: NewLinkModalProps) {
       const { linkId } = await createLink(formData, String(tripId));
       addLink(linkId, data.title, data.url);
       reset();
+      closeNewLinkModal();
+      toast.success("Link added successfully.");
     } catch (err) {
-      // TODO: Add toast component
+      toast.error("There was an error adding your link. Please try again.");
       alert("Error creating link");
     }
   };
@@ -79,7 +82,7 @@ export default function NewLinkModal(props: NewLinkModalProps) {
               {...register("url")}
             />
           </div>
-          <Button type="submit" size="full">
+          <Button type="submit" disabled={isSubmitting} size="full">
             Add new link
             <Plus className="size-5" />
           </Button>

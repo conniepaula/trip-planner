@@ -1,3 +1,4 @@
+import { Toaster } from "sonner";
 import TripGuests from "@/components/trip/trip-guests";
 import NewActivity from "@/components/trip/new-activity";
 import Separator from "@/components/ui/separator";
@@ -9,6 +10,8 @@ import { getTripActivities } from "@/utils/get-trip-activities";
 import { getTripDetails } from "@/utils/get-trip-details";
 import { getTripLinks } from "@/utils/get-trip-links";
 import { getTripParticipants } from "@/utils/get-trip-participants";
+
+export const revalidate = 10;
 
 export default async function TripPage({
   params,
@@ -57,6 +60,7 @@ export default async function TripPage({
           </main>
         </div>
       </TripProvider>
+      <Toaster duration={4000} />
     </div>
   );
 }

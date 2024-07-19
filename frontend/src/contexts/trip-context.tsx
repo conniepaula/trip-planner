@@ -7,6 +7,7 @@ import {
   setTripDetailsAction,
 } from "@/reducers/trip/actions";
 import { tripReducer, TripState } from "@/reducers/trip/reducer";
+import { insertSortedActivity } from "@/utils/insertSortedActivity";
 import { isSameDay } from "date-fns";
 import { ReactNode, createContext, useContext, useReducer } from "react";
 
@@ -73,12 +74,13 @@ export function TripProvider(props: TripProviderProps) {
   const addActivity = (id: string, title: string, dateTime: Date) => {
     const updatedActivities = activities.map((activitiesInDate) => {
       if (isSameDay(dateTime, activitiesInDate.date)) {
+        const newActivitiesArray = insertSortedActivity(
+          activitiesInDate.activities,
+          { id, title, occurs_at: dateTime, trip_id: trip.id },
+        );
         return {
           ...activitiesInDate,
-          activities: [
-            ...activitiesInDate.activities,
-            { id, title, occurs_at: dateTime, trip_id: trip.id },
-          ],
+          activities: newActivitiesArray,
         };
       }
       return activitiesInDate;
